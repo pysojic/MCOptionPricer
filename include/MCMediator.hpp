@@ -95,6 +95,7 @@ void MCMediator<SDE>::start()
                 });
             // Send path data to the Pricers
             m_path(m_res);
+            
         });
     sw.Stop();
 
