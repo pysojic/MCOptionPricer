@@ -5,9 +5,8 @@
 // Pierre-Yves Sojic
 //
 
-#pragma once
-
 #include <iostream>
+#include <memory>
 
 #include "Interface.hpp"
 

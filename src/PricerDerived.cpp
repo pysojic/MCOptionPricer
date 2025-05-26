@@ -1,14 +1,15 @@
 // PricerDerived.cpp
 // 
 // Implementation of hpp file
-// Currently supports European and Asian options
+// Currently supports European, Barrier and Asian options
 // 
 // Pierre-Yves Sojic
 //
 
 #include <algorithm>
-#include <numeric>
+#include <cmath>
 #include <iostream>
+#include <numeric>
 
 #include "PricerDerived.hpp"
 
@@ -22,7 +23,7 @@ void EuropeanPricer::process_path(const std::vector<double>& path)
 {
 	m_callSum += m_callPayoff(path.back()); // Each path simulation is added to the sum variable
 	m_putSum += m_putPayoff(path.back());
-	++m_NSim; // Increment the simulation counter
+	m_NSim.fetch_add(1, std::memory_order_relaxed); // Increment the simulation counter
 }
 
 void EuropeanPricer::post_process(double duration)
@@ -56,7 +57,7 @@ void AsianPricer::process_path(const std::vector<double>& path)
 	m_geom_callSum += m_callPayoff(geom_avg);
 	m_putSum += m_putPayoff(avg);
 	m_geom_putSum += m_putPayoff(geom_avg);
-	++m_NSim;
+	m_NSim.fetch_add(1, std::memory_order_relaxed);
 }
 
 void AsianPricer::post_process(double duration)
@@ -141,7 +142,7 @@ void BarrierPricer::process_path(const std::vector<double>& path)
 		break;
 	}
 
-	++m_NSim;
+	m_NSim.fetch_add(1, std::memory_order_relaxed);
 }
 
 void BarrierPricer::post_process(double duration)

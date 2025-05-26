@@ -4,8 +4,7 @@
 //
 // Pierre-Yves Sojic
 
-#ifndef OPTIONDATA_HPP
-#define OPTIONDATA_HPP
+#pragma once
 
 #include <algorithm> 
 
@@ -50,6 +49,3 @@ struct OptionData
 		}
 	}
 };
-
-
-#endif //! OPTIONDATA_HPP
