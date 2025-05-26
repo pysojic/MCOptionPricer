@@ -77,7 +77,7 @@ void MCMediator<SDE>::start()
 
     // Usina a iota range to iterate over in the for_each loop
     auto iota = std::ranges::views::iota(1, (int)m_NSim + 1);
-    std::for_each(std::execution::par_unseq, iota.begin(), iota.end(), [&](std::size_t i)
+    std::for_each(std::execution::par, iota.begin(), iota.end(), [&](std::size_t i)
         { // Calculate a path at each iteration
          //   if ((i / 5000) * 5000 == i)
           // Give status after a given numbers of iterations
@@ -91,7 +91,7 @@ void MCMediator<SDE>::start()
                 {
                     // Compute the solution at level n+1
                     m_res[j] = m_fdm->advance(m_res[j - 1], m_fdm->get_mesh()[j - 1], m_fdm->get_meshSize(), m_rng->generate_rn(), m_rng->generate_rn());
-                    ++j; // Advance to the next time step
+                    j.fetch_add(1, std::memory_order_relaxed); // Advance to the next time step
                 });
             // Send path data to the Pricers
             m_path(m_res);
